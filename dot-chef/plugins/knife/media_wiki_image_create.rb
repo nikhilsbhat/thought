@@ -67,10 +67,10 @@ module MediaWikiApp
         case config[:packer_option]
         when 'validate'
             validate = packer_validate pconfig
-			puts validate
+            puts "validate result is: #{validate}"
         when 'build'
             build = packer_build pconfig
-			puts build
+            puts "build result is: #{build}"
         else
             packer_validate pconfig
         end

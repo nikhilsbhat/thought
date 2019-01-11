@@ -3,17 +3,17 @@ require 'chef/knife'
 module MediaWikiApp
   module MediawikiCommon
 
-    def store_item_to_databag(data,item)
+    def store_item_to_databag(data,item,refrence)
         if check_if_data_exists data
-            if check_if_itme_exists item
+            if check_if_itme_exists data,refrence
                 return false
             else
-                create_databag_item data item
+                create_databag_item data, item
                 return true
             end
         else
             create_databag(data)
-            create_databag_item data item
+            create_databag_item data, item
             return true
         end
     end
@@ -27,10 +27,14 @@ module MediaWikiApp
     end
 
     def check_if_itme_exists(data,item)
-        query = Chef::Search::Query.new
-        query_value = query.search(:"#{data}", "id:#{item}")
-        if query_value[2] == 1
-            return true
+		if check_if_data_exists data
+            query = Chef::Search::Query.new
+            query_value = query.search(:"#{data}", "id:#{item}")
+            if query_value[2] == 1
+                return true
+            else
+                return false
+            end
         else
             return false
         end
