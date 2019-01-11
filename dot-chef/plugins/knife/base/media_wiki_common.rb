@@ -18,6 +18,19 @@ module MediaWikiApp
         end
     end
 
+    def delete_item_from_databag(data,item)
+        if check_if_data_exists data
+            if check_if_itme_exists data,item
+                delete_databag_item data, item
+                return true
+            else
+                return false
+            end
+        else
+            return false
+		end
+    end
+
     def check_if_data_exists(resource)
         if Chef::DataBag.list.key?(resource)
             return true
@@ -27,7 +40,7 @@ module MediaWikiApp
     end
 
     def check_if_itme_exists(data,item)
-		if check_if_data_exists data
+        if check_if_data_exists data
             query = Chef::Search::Query.new
             query_value = query.search(:"#{data}", "id:#{item}")
             if query_value[2] == 1
@@ -46,11 +59,22 @@ module MediaWikiApp
         data_bag.create
     end
 
+    def delete_databag(data)
+        data_bag = Chef::DataBag.new
+        data_bag.name(data)
+        data_bag.destroy
+    end
+
     def create_databag_item(data,item)
        data_item = Chef::DataBagItem.new
        data_item.data_bag(data)
        data_item.raw_data = item  
        data_item.save
+    end
+
+    def delete_databag_item(data,item)
+       data_item = Chef::DataBagItem.new 
+       data_item.destroy(data, item)
     end
 
     def fetch_data(data_bag,databag_item,resource)
