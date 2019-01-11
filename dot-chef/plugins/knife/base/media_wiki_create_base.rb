@@ -65,7 +65,7 @@ module MediaWikiApp
 
     end
 
-	def create_aws_server(node_name,network,security_group,image,ssh_key_name,flavor,assignpubIP)
+    def create_aws_server(node_name,network,security_group,image,ssh_key_name,flavor,assignpubIP)
 
         resp = aws_connection_client.run_instances({
              image_id: image, 
@@ -73,13 +73,13 @@ module MediaWikiApp
              key_name: ssh_key_name, 
              max_count: 1, 
              min_count: 1, 
-             security_group_ids: [
-                 security_group, 
-             ], 
-             subnet_id: network,
-			 network_interfaces: [{
-				associate_public_ip_address: assignpubIP
-			 },],
+             network_interfaces: [{
+                associate_public_ip_address: assignpubIP,
+                device_index: 0,
+                subnet_id: network,
+				delete_on_termination: true,
+				groups: [ security_group ],
+             },],
              tag_specifications: [
                  {
                      resource_type: "instance", 
@@ -88,11 +88,11 @@ module MediaWikiApp
                          value: node_name, 
                      },], 
                  }, 
-		     ],
+             ],
         })
-		return {"InstanceId" => resp.instances[0].instance_id, "Nodename" => resp.instances[0].tags[0].value, "ImageIdUsed" => resp.instances[0].image_id, "LaunchedAt" => resp.instances[0].launch_time, "NetworkCreatedIn" => resp.instances[0].subnet_id}
+        return {"InstanceId" => resp.instances[0].instance_id, "Nodename" => resp.instances[0].tags[0].value, "ImageIdUsed" => resp.instances[0].image_id, "LaunchedAt" => resp.instances[0].launch_time, "NetworkCreatedIn" => resp.instances[0].subnet_id}
 
-	end
+    end
 
   end
 end

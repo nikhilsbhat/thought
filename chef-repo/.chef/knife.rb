@@ -25,3 +25,4 @@ knife[:identity_file]         = ["#{current_dir}/pun-chef-coe.pem"]
 knife[:ssh_port]              = 22
 knife[:region]                = "ap-south-1"
 knife[:security_group_id]     = "sg-06efe0a7ff3dde6c6"
+knife[:flavor]                = "t2.micro"
