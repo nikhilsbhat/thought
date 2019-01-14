@@ -22,7 +22,7 @@ this packer blend plugin help in creating custom image.
 
 This plugin provides the following Knife subcommands. Specific command options can be found by invoking the subcommand with a `--help` flag
 
-### knife mediawiki stack create
+### `knife mediawiki stack create`
 
 ```bash
     knife mediawiki stack create (options)
@@ -55,7 +55,7 @@ This will be done to make sure that all created resources will be in tight coupl
     # flags --wiki-network and --mysql-network as the name specifies these are networks for mediawiki and mysql.
 ```
 
-### knife mediawiki image create
+### `knife mediawiki image create`
 
 ```bash
     knife mediawiki image create (options)
@@ -106,16 +106,16 @@ The below sample show the databag structure which it is going to create.
     }
 ```
 
-### knife mediawiki lb create
+### `knife mediawiki lb create`
 
 This helps one in creating network loadbalancers in aws (classic loadbalancer), and it will store its **details in databag** for future use
 
-### knife mediawiki lb delete
+### `knife mediawiki lb delete`
 
 This helps in deleting loadbalancers created by 'knife mediawiki lb create' and is also takes care of deregistering it from chef.
 **Note, deregistering refers to cleaning its data stored in chef databag **
 
-### knife mediawiki server create
+### `knife mediawiki server create`
 
 Finally 'knife mediawiki stack create' will use this plugin/class to provision running/workinig chef-node in aws.
 **Note, this does not use 'knife ec2' to provision servers rather it uses aws sdk**.
