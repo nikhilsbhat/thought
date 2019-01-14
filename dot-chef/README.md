@@ -101,7 +101,7 @@ The below sample show the databag structure which it is going to create.
 		     .          .
 			 .          .
 			 .          .
-		<node-name>: <image-id>
+		<node-name>: <image-id> # this is a refrence for future addition as the 'knife image create' is called on
       }
     }
 ```
