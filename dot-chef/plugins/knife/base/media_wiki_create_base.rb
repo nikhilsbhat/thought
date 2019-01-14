@@ -1,7 +1,7 @@
 require "#{File.dirname(__FILE__)}/media_wiki_aws_client"
 
 module MediaWikiApp
-  class MediaWikiCreateBase < Chef::Knife
+  class MediawikiCreateBase < Chef::Knife
 
     include MediaWikiAwsBase
 
@@ -77,8 +77,8 @@ module MediaWikiApp
                 associate_public_ip_address: assignpubIP,
                 device_index: 0,
                 subnet_id: network,
-				delete_on_termination: true,
-				groups: [ security_group ],
+                delete_on_termination: true,
+                groups: [ security_group ],
              },],
              tag_specifications: [
                  {
@@ -90,7 +90,7 @@ module MediaWikiApp
                  }, 
              ],
         })
-        return {"InstanceId" => resp.instances[0].instance_id, "Nodename" => resp.instances[0].tags[0].value, "ImageIdUsed" => resp.instances[0].image_id, "LaunchedAt" => resp.instances[0].launch_time, "NetworkCreatedIn" => resp.instances[0].subnet_id}
+        return {"InstanceId" => resp.instances[0].instance_id, "Nodename" => resp.instances[0].tags[0].value, "ImageIdUsed" => resp.instances[0].image_id, "LaunchedAt" => (resp.instances[0].launch_time).to_s, "NetworkCreatedIn" => resp.instances[0].subnet_id}
 
     end
 

@@ -70,6 +70,9 @@ module MediaWikiApp
             puts "validate result is: #{validate}"
         when 'build'
             build = packer_build pconfig
+            # AMI which will be collected should be logged/stored in databag, 
+            # since it is in beta it takes time for me to read the data to get AMI.
+            # for time beig I am not storing rather making manual entry to databag.
             puts "build result is: #{build}"
         else
             packer_validate pconfig
@@ -78,7 +81,7 @@ module MediaWikiApp
     end
 
     def packer_config
-		puts "packer-amazon-#{config[:nodename]}.json"
+                puts "packer-amazon-#{config[:nodename]}.json"
         pconfig = Packer::Config.new "packer-amazon-#{config[:nodename]}.json"
         pconfig.description "this will build a customized image for mediawiki"
         #pconfig.add_variable 'environment', config[:environment]
@@ -95,12 +98,12 @@ module MediaWikiApp
         return resp
     end
 
-	def packer_validate(config)
+    def packer_validate(config)
         resp = config.validate
         return resp
-	end
+    end
 
-	def get_packer_provisioner(pconfig)
+    def get_packer_provisioner(pconfig)
         provisioner = decide_provisioner pconfig, config[:packer_provisioner]
         provisioner.server_url Chef::Config[:knife][:chef_server_url]
         provisioner.chef_environment config[:environment]
@@ -119,15 +122,13 @@ module MediaWikiApp
         return provisioner
     end
 
-	def get_packer_builder(pconfig)
+    def get_packer_builder(pconfig)
         builder = decide_builder pconfig, config[:packer_builder]
         builder.access_key Chef::Config[:knife][:aws_access_key_id]
         builder.secret_key Chef::Config[:knife][:aws_secret_access_key]
         if config[:region] != ""
             builder.region config[:region]
-			puts config[:region]
         else
-			puts config[:region]
             builder.region Chef::Config[:knife][:region]
         end
         if !config[:image_id].nil?
@@ -149,7 +150,7 @@ module MediaWikiApp
         return builder
     end
 
-	def decide_provisioner(config, name)
+    def decide_provisioner(config, name)
         case name
         when 'chef'
             return config.add_provisioner Packer::Provisioner::CHEF_CLIENT
@@ -157,9 +158,9 @@ module MediaWikiApp
         else
             return config.add_provisioner Packer::Provisioner::CHEF_CLIENT
         end
-	end
+    end
 
-	def decide_builder(config, name)
+    def decide_builder(config, name)
         case name
         when 'aws-ebs'
             return config.add_builder Packer::Builder::AMAZON_EBS
@@ -167,7 +168,29 @@ module MediaWikiApp
         else
             return config.add_builder Packer::Builder::AMAZON_EBS
         end
-	end
+    end
+
+    # this is tested function for storing images, yet not using this because 
+    # I am having issues while reading response from the package 'packer-config'.
+    # It can be fixed but considering the time constrains which I have, we will assume that this will be used for our purpose though it is not used.
+    def store_image_details
+        if check_if_item_exists "wikimedia", "nodes"
+          if (check_if_particular_item_exists "wikimedia", "nodes", config[:item])
+            return "We already have a registerd chef node with name #{config[:item]}, hence we cannot let you perform this action"
+          else
+            data = { "#{config[:item]}" => "#{config[:value]}"}
+            stat2 = add_raw_data "wikimedia", "nodes", config[:item], data
+            return stat2
+          end
+        else
+          data = {
+                  'id' => "nodes",
+                  "#{config[:item]}" => "#{config[:value]}"
+                 }
+          status = store_item_to_databag "wikimedia",data,"nodes"
+          return status   
+        end
+    end
 
   end
 end

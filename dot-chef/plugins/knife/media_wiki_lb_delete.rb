@@ -2,7 +2,7 @@ require 'chef/knife'
 require "#{File.dirname(__FILE__)}/base/media_wiki_common"
 
 module MediaWikiApp
-  class MediaWikiLoadBalancerDelete < Chef::Knife
+  class MediawikiLoadBalancerDelete < Chef::Knife
 
     include MediawikiCommon
     deps do

@@ -6,12 +6,12 @@ require "#{File.dirname(__FILE__)}/base/media_wiki_common"
 # Answer is, we use packer to build custom image and it takes care of registering image with server
 # all we need to do is to spin up the instance and this guy does just that.
 module MediaWikiApp
-  class MediaWikiServerCreate < Chef::Knife
+  class MediawikiServerCreate < Chef::Knife
 
     include MediawikiCommon
     deps do
       require "#{File.dirname(__FILE__)}/base/media_wiki_create_base"
-      MediaWikiApp::MediaWikiCreateBase.load_deps
+      MediaWikiApp::MediawikiCreateBase.load_deps
     end
 
     banner 'knife mediawiki server create (options)'
@@ -68,15 +68,16 @@ module MediaWikiApp
         else
             flavor = Chef::Config[:knife][:flavor]
         end
-        create_server(security,key,flavor)
+        server = create_server(security,key,flavor)
+        return server
     end
 
     def create_server(security,key,flavor)
 
-      client = MediaWikiCreateBase.new
+      client = MediawikiCreateBase.new
       # server gets created here
       puts "#{ui.color('spinning up the server with chef registration built-in', :cyan)}"
-	  puts security,key,flavor
+      puts security,key,flavor
       server = client.create_aws_server config[:node_name], config[:network] ,security, config[:image_id], key, flavor, config[:assign_public_ip]
       puts "#{ui.color('server created successfully', :cyan)}"
       puts ""
@@ -89,7 +90,7 @@ module MediaWikiApp
       end
       puts "========================================================="
       puts ''
-
+      return server
     end
 
   end

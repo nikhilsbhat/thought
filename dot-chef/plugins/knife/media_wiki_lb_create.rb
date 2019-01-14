@@ -2,7 +2,7 @@ require 'chef/knife'
 require "#{File.dirname(__FILE__)}/base/media_wiki_common"
 
 module MediaWikiApp
-  class MediaWikiLoadBalancerCreate < Chef::Knife
+  class MediawikiLoadBalancerCreate < Chef::Knife
 
     include MediawikiCommon
     deps do
@@ -60,7 +60,7 @@ module MediaWikiApp
 
     def run
 
-      if check_if_itme_exists("loadbalancers", "#{config[:name]}")
+      if check_if_item_exists("loadbalancers", "#{config[:name]}")
           puts "#{ui.color('loadbalancer already exists with the name', :cyan)}  :#{config[:name]}-LB"
       else
           stat = create_lb
@@ -121,7 +121,7 @@ module MediaWikiApp
                 'ELB-NAME' => "#{config[:name]}-LB",
                 'ELB_DNS' => "#{dns}",
                }
-        status = store_item_to_databag "loadbalancers",data,"#{config[:name]}-LB"
+        status = store_item_to_databag "loadbalancers",data,"#{config[:name]}"
     end
 
   end
