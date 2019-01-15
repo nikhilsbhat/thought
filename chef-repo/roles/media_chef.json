@@ -1,0 +1,21 @@
+{
+  "name": "media_chef",
+  "description": "This role enacts as base for all other roles registerd under chef here. It configures chef-client and schedules chef client to run for every 30 min which it is changable",
+  "json_class": "Chef::Role",
+  "default_attributes": {
+
+  },
+  "override_attributes": {
+    "chef_client": {
+      "interval": 1800
+    }
+  },
+  "chef_type": "role",
+  "run_list": [
+    "recipe[chef-client::default]",
+    "recipe[chef-client::delete_validation]"
+  ],
+  "env_run_lists": {
+
+  }
+}
