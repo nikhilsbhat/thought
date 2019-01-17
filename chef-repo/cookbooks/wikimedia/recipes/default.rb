@@ -15,6 +15,13 @@ directory '/tmp/mediawiki' do
   recursive true
 end
 
+directory "#{node['sql']['secretpath']}" do
+  owner     'root'
+  group     'root'
+  mode      '0755'
+  recursive true
+end
+
 # this is temporary and will be removed soon
 directory "/var/www/html" do
   owner     'root'
@@ -33,10 +40,26 @@ remote_file '/tmp/mediawiki/medaiwiki.tar.gz' do
   action   :create_if_missing
 end
 
-# Create runit service
+cookbook_file "#{node['sql']['secretpath']}sqlsecret" do
+  cookbook 'wikimedia'
+  source 'sqlsecret'
+  owner 'root'
+  group 'root'
+  mode  '0755'
+  action :create_if_missing
+end
+
+# configuring mediawiki
 media_wiki 'medaiwiki' do
   action :configure
 end
+
+media_wiki 'setting' do
+  wiki_home node['medaiwiki']['home_path']
+  action    :loadlocalsettings
+end
+# This has to be used if mediawiki's version is above 1.26.0. Since version below this
+# has more issues dropping it out.
 
 skins = {
   'CologneBlue'  => 'https://gerrit.wikimedia.org/r/mediawiki/skins/CologneBlue',
@@ -61,4 +84,10 @@ directory '/tmp/mediawiki' do
   mode      '0755'
   recursive true
   action    :delete
+end
+
+cookbook_file "#{node['sql']['secretpath']}sqlsecret" do
+  cookbook 'wikimedia'
+  source 'sqlsecret'
+  action :delete
 end
