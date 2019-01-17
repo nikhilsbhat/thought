@@ -1,0 +1,23 @@
+{
+  "name": "mediawiki",
+  "description": "This role is responsible for installing and configuring mediawiki",
+  "json_class": "Chef::Role",
+  "default_attributes": {
+
+  },
+  "override_attributes": {
+   "medaiwiki": {
+     "main_version": "1.29",
+     "sub_version": "3",
+     "core": "false"
+   }
+  },
+  "chef_type": "role",
+  "run_list": [
+    "role[media_chef]",
+    "recipe[wikimedia::default]"
+  ],
+  "env_run_lists": {
+
+  }
+}
