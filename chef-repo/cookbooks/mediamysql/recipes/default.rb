@@ -9,5 +9,6 @@ mysql_service 'wiki' do
   bind_address '0.0.0.0'
   version      '5.6'
   initial_root_password 'Ch4ng3me'
+  provider     Chef::Provider::MysqlServiceSysvinit
   action       [:create, :start]
 end
