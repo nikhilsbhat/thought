@@ -1,0 +1,18 @@
+{
+  "name": "mediamysql",
+  "description": "This role is responsible for installing and configuring mysql",
+  "json_class": "Chef::Role",
+  "default_attributes": {
+
+  },
+  "override_attributes": {
+  },
+  "chef_type": "role",
+  "run_list": [
+    "role[media_chef]",
+    "recipe[mediamysql::default]"
+  ],
+  "env_run_lists": {
+
+  }
+}

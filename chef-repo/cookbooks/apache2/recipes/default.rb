@@ -8,7 +8,7 @@ apt_update 'update' do
 end
 
 apt_package 'apache2' do
-  version '2.4.18'
+#  version '2.4.18-2'
   action :install
 end
 
