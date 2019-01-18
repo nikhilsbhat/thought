@@ -7,7 +7,7 @@ node_name                "bhatnikhil"
 client_key               "#{current_dir}/bhatnikhil.pem"
 chef_server_url          "https://api.chef.io/organizations/testtree"
 cookbook_path            ["#{current_dir}/../cookbooks"]
-syntax_check_cache_path  ["#{current_dir}/../syntaxcache"]
+syntax_check_cache_path  ["/root/syntaxcache"]
 knife[:editor]                = "vi"
 knife[:ssh_user]              = 'ubuntu'
 
