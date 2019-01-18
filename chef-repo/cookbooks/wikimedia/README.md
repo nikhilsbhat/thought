@@ -18,6 +18,7 @@ depends 'wikimedia'
 ```
 
 Then, in a recipe:
+**Note: no need to follow below method if default is inicluded.**
 
 ```ruby
 media_wiki 'medaiwiki' do
