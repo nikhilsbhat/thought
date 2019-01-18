@@ -1,0 +1,17 @@
+{
+  "name": "wikisql",
+  "description": "This role is responsible for installing and configuring sql's dependinig on its runlist",
+  "json_class": "Chef::Role",
+  "default_attributes": {
+
+  },
+  "override_attributes": {
+  },
+  "chef_type": "role",
+  "run_list": [
+    "role[mediamysql]"
+  ],
+  "env_run_lists": {
+
+  }
+}

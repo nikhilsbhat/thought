@@ -78,11 +78,22 @@ class Chef
           dbpassword:  dbpassword
         )
         loadsetting.run_action(:create)
+        restart_services
       end
 
       converge_by("Configure #{new_resource}",&loadsettings)
 
     end
+
+    def restart_services
+      cmds = ["sudo phpenmod mbstring","sudo phpenmod xml","sudo systemctl restart apache2.service"]
+      cmds.each do |cmd|
+        install = Chef::Resource::Execute.new(cmd, run_context)
+        install.cwd(::Dir.pwd)
+        install.user('root')
+        install.run_action(:run)
+      end
+    end    
 
   end
 end
